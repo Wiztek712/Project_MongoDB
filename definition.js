@@ -73,7 +73,7 @@ async function main() {
     ];
 
     // Insert all players using insertMany
-    const result = await collection.insertMany(players);
+    const result = await collection_player.insertMany(players);
 
     console.log(`${result.insertedCount} players were inserted successfully.`);
   } catch (error) {
