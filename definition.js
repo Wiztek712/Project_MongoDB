@@ -21,6 +21,7 @@ async function main() {
     // Define the players in an array (France, Belgium, England, and Argentina)
     const players = [
       // France
+      { firstName: "Hugo", lastName: "Lloris", birthDate: "26.12.1986", height: 188, weight: 85, position: "gardien" },
       { firstName: "Olivier", lastName: "Giroud", birthDate: "30.09.1986", height: 193, weight: 84, position: "attaquant" },
       { firstName: "Kylian", lastName: "Mbappe", birthDate: "20.12.1998", height: 178, weight: 77, position: "attaquant" },
       { firstName: "Antoine", lastName: "Griezmann", birthDate: "21.03.1991", height: 175, weight: 75, position: "attaquant" },
