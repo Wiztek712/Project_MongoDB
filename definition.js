@@ -74,11 +74,27 @@ async function main() {
     ];
 
     // Insert all players using insertMany
-    const result = await collection_player.insertMany(players);
+    const result_players = await collection_player.insertMany(players);
 
-    console.log(`${result.insertedCount} players were inserted successfully.`);
+    console.log(`${result_players.insertedCount} players were inserted successfully.`);
+
+    // Choose a collection
+    const collection_team = database.collection("Teams");
+
+    const teams = [
+      {team_name: "France", colors: ["Bleu", "Blanc"], stadium: "Stade de France", players: [""]},
+      {team_name: "Belgique", colors: ["Rouge", "Noir"], stadium: "Stade Roi Baudouin", players: [""]},
+      {team_name: "Allemagne", colors: ["Blanc", "Noir"], stadium: "Olympiastadion Berlin", players: [""]},
+      {team_name: "Argentine", colors: ["Bleu clair", "Blanc"], stadium: "Stade de la Bombonera", players: [""]}
+    ];
+
+    // Insert all teams using insertMany
+    const result_team = await collection_team.insertMany(teams);
+
+    console.log(`${result_team.insertedCount} teams were inserted successfully.`);
+
   } catch (error) {
-    console.error("Error occurred while inserting players:", error);
+    console.error("Error occurred while inserting data:", error);
 
   } finally {
     // Close the connection
