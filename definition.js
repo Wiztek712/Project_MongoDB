@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 const uri = "mongodb://localhost:27017";  // MongoDB connection string (for local development)
 
@@ -21,56 +21,56 @@ async function main() {
     // Define the players in an array (France, Belgium, England, and Argentina)
     const players = [
       // France
-      { _id : ObjectId("lloris"), firstName: "Hugo", lastName: "Lloris", birthDate: ISODate("26-12-1986T00:00:00Z"), height: 188, weight: 85, position: "gardien" },
-      { _id : ObjectId("giroud"), firstName: "Olivier", lastName: "Giroud", birthDate: ISODate("30-09-1986T00:00:00Z"), height: 193, weight: 84, position: "attaquant" },
-      { _id : ObjectId("mbappe"), firstName: "Kylian", lastName: "Mbappe", birthDate: ISODate("20-12-1998T00:00:00Z"), height: 178, weight: 77, position: "attaquant" },
-      { _id : ObjectId("griezmann"), firstName: "Antoine", lastName: "Griezmann", birthDate: ISODate("21-03-1991T00:00:00Z"), height: 175, weight: 75, position: "attaquant" },
-      { _id : ObjectId("matuidi"), firstName: "Blaise", lastName: "Matuidi", birthDate: ISODate("09-04-1987T00:00:00Z"), height: 180, weight: 78, position: "attaquant" },
-      { _id : ObjectId("pogba"), firstName: "Paul", lastName: "Pogba", birthDate: ISODate("15-03-1993T00:00:00Z"), height: 191, weight: 84, position: "milieu" },
-      { _id : ObjectId("kante"), firstName: "Ngolo", lastName: "Kante", birthDate: ISODate("29-03-1991T00:00:00Z"), height: 168, weight: 73, position: "milieu" },
-      { _id : ObjectId("varane"), firstName: "Raphael", lastName: "Varane", birthDate: ISODate("25-04-1993T00:00:00Z"), height: 191, weight: 83, position: "defenseur" },
-      { _id : ObjectId("umtiti"), firstName: "Samuel", lastName: "Umtiti", birthDate: ISODate("14-11-1993T00:00:00Z"), height: 182, weight: 78, position: "defenseur" },
-      { _id : ObjectId("hernandez"), firstName: "Lucas", lastName: "Hernandez", birthDate: ISODate("14-02-1996T00:00:00Z"), height: 184, weight: 81, position: "defenseur" },
-      { _id : ObjectId("pavard"), firstName: "Benjamin", lastName: "Pavard", birthDate: ISODate("28-03-1996T00:00:00Z"), height: 186, weight: 83, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Hugo", lastName: "Lloris", birthDate: "26.12.1986", height: 188, weight: 85, position: "gardien" },
+      { _id : new ObjectId(), firstName: "Olivier", lastName: "Giroud", birthDate: "30.09.1986", height: 193, weight: 84, position: "attaquant" },
+      { _id : new ObjectId(), firstName: "Kylian", lastName: "Mbappe", birthDate: "20.12.1998", height: 178, weight: 77, position: "attaquant" },
+      { _id : new ObjectId(), firstName: "Antoine", lastName: "Griezmann", birthDate: "21.03.1991", height: 175, weight: 75, position: "attaquant" },
+      { _id : new ObjectId(), firstName: "Blaise", lastName: "Matuidi", birthDate: "09.04.1987", height: 180, weight: 78, position: "attaquant" },
+      { _id : new ObjectId(), firstName: "Paul", lastName: "Pogba", birthDate: "15.03.1993", height: 191, weight: 84, position: "milieu" },
+      { _id : new ObjectId(), firstName: "Ngolo", lastName: "Kante", birthDate: "29.03.1991", height: 168, weight: 73, position: "milieu" },
+      { _id : new ObjectId(), firstName: "Raphael", lastName: "Varane", birthDate: "25.04.1993", height: 191, weight: 83, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Samuel", lastName: "Umtiti", birthDate: "14.11.1993", height: 182, weight: 78, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Lucas", lastName: "Hernandez", birthDate: "14.02.1996", height: 184, weight: 81, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Benjamin", lastName: "Pavard", birthDate: "28.03.1996", height: 186, weight: 83, position: "defenseur" },
 
       // Belgium
-      { _id : ObjectId("courtois"), firstName: "Thibaut", lastName: "Courtois", birthDate: ISODate("11-05-1992T00:00:00Z"), height: 199, weight: 96, position: "gardien" },
-      { _id : ObjectId("alderweireld"), firstName: "Toby", lastName: "Alderweireld", birthDate: ISODate("02-03-1989T00:00:00Z"), height: 187, weight: 91, position: "defenseur" },
-      { _id : ObjectId("vertonghen"), firstName: "Jan", lastName: "Vertonghen", birthDate: ISODate("24-04-1987T00:00:00Z"), height: 189, weight: 87, position: "defenseur" },
-      { _id : ObjectId("meunier"), firstName: "Thomas", lastName: "Meunier", birthDate: ISODate("12-09-1991T00:00:00Z"), height: 191, weight: 84, position: "defenseur" },
-      { _id : ObjectId("witsel"), firstName: "Axel", lastName: "Witsel", birthDate: ISODate("12-01-1989T00:00:00Z"), height: 186, weight: 81, position: "milieu" },
-      { _id : ObjectId("debruyne"), firstName: "Kevin", lastName: "De Bruyne", birthDate: ISODate("28-06-1991T00:00:00Z"), height: 181, weight: 70, position: "milieu" },
-      { _id : ObjectId("tielemans"), firstName: "Youri", lastName: "Tielemans", birthDate: ISODate("07-05-1997T00:00:00Z"), height: 176, weight: 72, position: "milieu" },
-      { _id : ObjectId("hazard"), firstName: "Eden", lastName: "Hazard", birthDate: ISODate("07-01-1991T00:00:00Z"), height: 175, weight: 74, position: "attaquant" },
-      { _id : ObjectId("lukaku"), firstName: "Romelu", lastName: "Lukaku", birthDate: ISODate("13-05-1993T00:00:00Z"), height: 191, weight: 94, position: "attaquant" },
-      { _id : ObjectId("mertens"), firstName: "Dries", lastName: "Mertens", birthDate: ISODate("06-05-1987T00:00:00Z"), height: 169, weight: 61, position: "attaquant" },
-      { _id : ObjectId("carrasco"), firstName: "Yannick", lastName: "Carrasco", birthDate: ISODate("04-09-1993T00:00:00Z"), height: 181, weight: 73, position: "milieu" },
+      { _id : new ObjectId(), firstName: "Thibaut", lastName: "Courtois", birthDate: "11.05.1992", height: 199, weight: 96, position: "gardien" },
+      { _id : new ObjectId(), firstName: "Toby", lastName: "Alderweireld", birthDate: "02.03.1989", height: 187, weight: 91, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Jan", lastName: "Vertonghen", birthDate: "24.04.1987", height: 189, weight: 87, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Thomas", lastName: "Meunier", birthDate: "12.09.1991", height: 191, weight: 84, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Axel", lastName: "Witsel", birthDate: "12.01.1989", height: 186, weight: 81, position: "milieu" },
+      { _id : new ObjectId(), firstName: "Kevin", lastName: "De Bruyne", birthDate: "28.06.1991", height: 181, weight: 70, position: "milieu" },
+      { _id : new ObjectId(), firstName: "Youri", lastName: "Tielemans", birthDate: "07.05.1997", height: 176, weight: 72, position: "milieu" },
+      { _id : new ObjectId(), firstName: "Eden", lastName: "Hazard", birthDate: "07.01.1991", height: 175, weight: 74, position: "attaquant" },
+      { _id : new ObjectId(), firstName: "Romelu", lastName: "Lukaku", birthDate: "13.05.1993", height: 191, weight: 94, position: "attaquant" },
+      { _id : new ObjectId(), firstName: "Dries", lastName: "Mertens", birthDate: "06.05.1987", height: 169, weight: 61, position: "attaquant" },
+      { _id : new ObjectId(), firstName: "Yannick", lastName: "Carrasco", birthDate: "04.09.1993", height: 181, weight: 73, position: "milieu" },
 
       // England
-      { _id : ObjectId("pickford"), firstName: "Jordan", lastName: "Pickford", birthDate: ISODate("07-03-1994T00:00:00Z"), height: 185, weight: 77, position: "gardien" },
-      { _id : ObjectId("walker"), firstName: "Kyle", lastName: "Walker", birthDate: ISODate("28-05-1990T00:00:00Z"), height: 183, weight: 80, position: "defenseur" },
-      { _id : ObjectId("stones"), firstName: "John", lastName: "Stones", birthDate: ISODate("28-05-1994T00:00:00Z"), height: 188, weight: 77, position: "defenseur" },
-      { _id : ObjectId("maguire"), firstName: "Harry", lastName: "Maguire", birthDate: ISODate("05-03-1993T00:00:00Z"), height: 194, weight: 100, position: "defenseur" },
-      { _id : ObjectId("shaw"), firstName: "Luke", lastName: "Shaw", birthDate: ISODate("12-07-1995T00:00:00Z"), height: 185, weight: 75, position: "defenseur" },
-      { _id : ObjectId("rice"), firstName: "Declan", lastName: "Rice", birthDate: ISODate("14-01-1999T00:00:00Z"), height: 185, weight: 80, position: "milieu" },
-      { _id : ObjectId("bellingham"), firstName: "Jude", lastName: "Bellingham", birthDate: ISODate("29-06-2003T00:00:00Z"), height: 186, weight: 75, position: "milieu" },
-      { _id : ObjectId("henderson"), firstName: "Jordan", lastName: "Henderson", birthDate: ISODate("17-06-1990T00:00:00Z"), height: 187, weight: 80, position: "milieu" },
-      { _id : ObjectId("sterling"), firstName: "Raheem", lastName: "Sterling", birthDate: ISODate("08-12-1994T00:00:00Z"), height: 170, weight: 69, position: "attaquant" },
-      { _id : ObjectId("kane"), firstName: "Harry", lastName: "Kane", birthDate: ISODate("28-07-1993T00:00:00Z"), height: 188, weight: 86, position: "attaquant" },
-      { _id : ObjectId("saka"), firstName: "Bukayo", lastName: "Saka", birthDate: ISODate("05-09-2001T00:00:00Z"), height: 178, weight: 73, position: "attaquant" },
+      { _id : new ObjectId(), firstName: "Jordan", lastName: "Pickford", birthDate: "07.03.1994", height: 185, weight: 77, position: "gardien" },
+      { _id : new ObjectId(), firstName: "Kyle", lastName: "Walker", birthDate: "28.05.1990", height: 183, weight: 80, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "John", lastName: "Stones", birthDate: "28.05.1994", height: 188, weight: 77, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Harry", lastName: "Maguire", birthDate: "05.03.1993", height: 194, weight: 100, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Luke", lastName: "Shaw", birthDate: "12.07.1995", height: 185, weight: 75, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Declan", lastName: "Rice", birthDate: "14.01.1999", height: 185, weight: 80, position: "milieu" },
+      { _id : new ObjectId(), firstName: "Jude", lastName: "Bellingham", birthDate: "29.06.2003", height: 186, weight: 75, position: "milieu" },
+      { _id : new ObjectId(), firstName: "Jordan", lastName: "Henderson", birthDate: "17.06.1990", height: 187, weight: 80, position: "milieu" },
+      { _id : new ObjectId(), firstName: "Raheem", lastName: "Sterling", birthDate: "08.12.1994", height: 170, weight: 69, position: "attaquant" },
+      { _id : new ObjectId(), firstName: "Harry", lastName: "Kane", birthDate: "28.07.1993", height: 188, weight: 86, position: "attaquant" },
+      { _id : new ObjectId(), firstName: "Bukayo", lastName: "Saka", birthDate: "05.09.2001", height: 178, weight: 73, position: "attaquant" },
 
       // Argentina
-      { _id : ObjectId("martinez"), firstName: "Emiliano", lastName: "Martinez", birthDate: ISODate("02-09-1992T00:00:00Z"), height: 195, weight: 88, position: "gardien" },
-      { _id : ObjectId("molina"), firstName: "Nahuel", lastName: "Molina", birthDate: ISODate("06-04-1998T00:00:00Z"), height: 175, weight: 70, position: "defenseur" },
-      { _id : ObjectId("romero"), firstName: "Cristian", lastName: "Romero", birthDate: ISODate("27-04-1998T00:00:00Z"), height: 185, weight: 79, position: "defenseur" },
-      { _id : ObjectId("otamendi"), firstName: "Nicolas", lastName: "Otamendi", birthDate: ISODate("12-02-1988T00:00:00Z"), height: 183, weight: 81, position: "defenseur" },
-      { _id : ObjectId("acuna"), firstName: "Marcos", lastName: "Acuna", birthDate: ISODate("28-10-1991T00:00:00Z"), height: 172, weight: 72, position: "defenseur" },
-      { _id : ObjectId("depaul"), firstName: "Rodrigo", lastName: "De Paul", birthDate: ISODate("24-05-1994T00:00:00Z"), height: 180, weight: 70, position: "milieu" },
-      { _id : ObjectId("paredes"), firstName: "Leandro", lastName: "Paredes", birthDate: ISODate("29-06-1994T00:00:00Z"), height: 180, weight: 75, position: "milieu" },
-      { _id : ObjectId("macallister"), firstName: "Alexis", lastName: "Mac Allister", birthDate: ISODate("24-12-1998T00:00:00Z"), height: 174, weight: 72, position: "milieu" },
-      { _id : ObjectId("messi"), firstName: "Lionel", lastName: "Messi", birthDate: ISODate("24-06-1987T00:00:00Z"), height: 170, weight: 72, position: "attaquant" },
-      { _id : ObjectId("alvarez"), firstName: "Julian", lastName: "Alvarez", birthDate: ISODate("31-01-2000T00:00:00Z"), height: 170, weight: 71, position: "attaquant" },
-      { _id : ObjectId("dimaria"), firstName: "Angel", lastName: "Di Maria", birthDate: ISODate("14-02-1988T00:00:00Z"), height: 180, weight: 75, position: "attaquant" }
+      { _id : new ObjectId(), firstName: "Emiliano", lastName: "Martinez", birthDate: "02.09.1992", height: 195, weight: 88, position: "gardien" },
+      { _id : new ObjectId(), firstName: "Nahuel", lastName: "Molina", birthDate: "06.04.1998", height: 175, weight: 70, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Cristian", lastName: "Romero", birthDate: "27.04.1998", height: 185, weight: 79, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Nicolas", lastName: "Otamendi", birthDate: "12.02.1988", height: 183, weight: 81, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Marcos", lastName: "Acuna", birthDate: "28.10.1991", height: 172, weight: 72, position: "defenseur" },
+      { _id : new ObjectId(), firstName: "Rodrigo", lastName: "De Paul", birthDate: "24.05.1994", height: 180, weight: 70, position: "milieu" },
+      { _id : new ObjectId(), firstName: "Leandro", lastName: "Paredes", birthDate: "29.06.1994", height: 180, weight: 75, position: "milieu" },
+      { _id : new ObjectId(), firstName: "Alexis", lastName: "Mac Allister", birthDate: "24.12.1998", height: 174, weight: 72, position: "milieu" },
+      { _id : new ObjectId(), firstName: "Lionel", lastName: "Messi", birthDate: "24.06.1987", height: 170, weight: 72, position: "attaquant" },
+      { _id : new ObjectId(), firstName: "Julian", lastName: "Alvarez", birthDate: "31.01.2000", height: 170, weight: 71, position: "attaquant" },
+      { _id : new ObjectId(), firstName: "Angel", lastName: "Di Maria", birthDate: "14.02.1988", height: 180, weight: 75, position: "attaquant" }
     ];
 
     // Insert all players using insertMany
@@ -81,15 +81,15 @@ async function main() {
     // Choose a collection
     const collection_team = database.collection("Teams");
 
-    const frId = ObjectId("france");
-    const beId = ObjectId("belgique");
-    const alId = ObjectId("allemagne");
-    const arId = ObjectId("argentine");
+    const frId = new ObjectId();
+    const beId = new ObjectId();
+    const enId = new ObjectId();
+    const arId = new ObjectId();
 
     const teams = [
       { _id : frId, team_name: "France", colors: ["Bleu", "Blanc"], stadium: "Stade de France", players: [""]},
       { _id : beId, team_name: "Belgique", colors: ["Rouge", "Noir"], stadium: "Stade Roi Baudouin", players: [""]},
-      { _id : alId, team_name: "Allemagne", colors: ["Blanc", "Noir"], stadium: "Olympiastadion Berlin", players: [""]},
+      { _id : enId, team_name: "Angleterre", colors: ["Blanc", "Rouge"], stadium: "Stade de Twickenham", players: [""]},
       { _id : arId, team_name: "Argentine", colors: ["Bleu clair", "Blanc"], stadium: "Stade de la Bombonera", players: [""]}
     ];
 
@@ -97,77 +97,47 @@ async function main() {
     const result_team = await collection_team.insertMany(teams);
 
     console.log(`${result_team.insertedCount} teams were inserted successfully.`);
-
+    
     // Update team_id for every players
     // France players
-    db.Players.updateMany(
+    collection_player.updateMany(
       { lastName: { $in: ["Lloris", "Giroud", "Mbappe", "Griezmann", "Matuidi", "Pogba", "Kante", "Varane", "Umtiti", "Hernandez", "Pavard"] } },  
       { $set: { teamId: frId } }
     );
 
     // Belgium players
-    db.Players.updateMany(
+    collection_player.updateMany(
       { lastName: { $in: ["Courtois", "Alderweireld", "Vertonghen", "Meunier", "Witsel", "De Bruyne", "Tielemans", "Hazard", "Lukaku", "Mertens", "Carrasco"] } },  
       { $set: { teamId: beId } }
     );
 
     // England players
-    db.Players.updateMany(
+    collection_player.updateMany(
       { lastName: { $in: ["Pickford", "Walker", "Stones", "Maguire", "Shaw", "Rice", "Bellingham", "Henderson", "Sterling", "Kane", "Saka"] } },  
       { $set: { teamId: enId } }
     );
 
     // Argentina players
-    db.Players.updateMany(
+    collection_player.updateMany(
       { lastName: { $in: ["Martinez", "Molina", "Romero", "Otamendi", "Acuna", "De Paul", "Paredes", "Mac Allister", "Messi", "Alvarez", "Di Maria"] } },  
       { $set: { teamId: arId } }
     );
 
-    // Update player_list for each team
-    // Update France team
-    const francePlayers = db.Players.find(
-      { teamId: frId },
-      { _id: 1 }  // Select only the player IDs
-    ).toArray().map(player => player._id);
+    // Update players list for each team
+    const updateTeamPlayers = async (teamId) => {
+      const players = await collection_player.find({ teamId }).toArray();
+      const playerIds = players.map(player => player._id);
+      await collection_team.updateOne(
+        { _id: teamId },
+        { $set: { players: playerIds } }
+      );
+    };
 
-    db.Teams.updateOne(
-      { _id: frId },
-      { $set: { players: francePlayers } }
-    );
+    await updateTeamPlayers(frId);
+    await updateTeamPlayers(beId);
+    await updateTeamPlayers(enId);
+    await updateTeamPlayers(arId);
 
-    // Update Belgium team
-    const belgiumPlayers = db.Players.find(
-      { teamId: beId },
-      { _id: 1 }
-    ).toArray().map(player => player._id);
-
-    db.Teams.updateOne(
-      { _id: beId },
-      { $set: { players: belgiumPlayers } }
-    );
-
-    // Update England team
-    const englandPlayers = db.Players.find(
-      { teamId: enId },
-      { _id: 1 }
-    ).toArray().map(player => player._id);
-
-    db.Teams.updateOne(
-      { _id: enId },
-      { $set: { players: englandPlayers } }
-    );
-
-    // Update Argentina team
-    const argentinaPlayers = db.Players.find(
-      { teamId: arId },
-      { _id: 1 }
-    ).toArray().map(player => player._id);
-
-    db.Teams.updateOne(
-      { _id: arId },
-      { $set: { players: argentinaPlayers } }
-    );
-    
   } catch (error) {
     console.error("Error occurred while inserting data:", error);
 
