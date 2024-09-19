@@ -97,6 +97,52 @@ async function main() {
     const result_team = await collection_team.insertMany(teams);
 
     console.log(`${result_team.insertedCount} teams were inserted successfully.`);
+
+    // Match creation
+    const collection_match = database.collection("Matches");
+
+    const semi_final_1 = new ObjectId();
+    const semi_final_2 = new ObjectId();
+
+    const matches = [
+      {
+        _id : semi_final_1,
+        home_team_name: frId,
+        away_team_name: beId,
+        competition: "WorldCup",
+        home_team_score: "3",
+        away_team_score: "0",
+        home_team_players: [
+          {
+            player_name:"",
+            mark:""
+          },
+          {
+            player_name:"",
+            mark:""
+          }
+        ],
+        home_team_players: [
+          {
+            player_name:"",
+            mark:""
+          },
+          {
+            player_name:"",mark:""
+          }
+        ],
+      },
+      {
+        _id : semi_final_2,
+        home_team_name: arId,
+        away_team_name: enId,
+        competition: "WorldCup",
+        home_team_score: "2",
+        away_team_score: "1",
+        home_team_players: [""],
+        away_team_players: [""]
+      }
+    ];
     
     // Update team_id for every players
     // France players
