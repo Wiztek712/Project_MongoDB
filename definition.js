@@ -81,11 +81,16 @@ async function main() {
     // Choose a collection
     const collection_team = database.collection("Teams");
 
+    const frId = ObjectId("france");
+    const beId = ObjectId("belgique");
+    const alId = ObjectId("allemagne");
+    const arId = ObjectId("argentine");
+
     const teams = [
-      {team_name: "France", colors: ["Bleu", "Blanc"], stadium: "Stade de France", players: [""]},
-      {team_name: "Belgique", colors: ["Rouge", "Noir"], stadium: "Stade Roi Baudouin", players: [""]},
-      {team_name: "Allemagne", colors: ["Blanc", "Noir"], stadium: "Olympiastadion Berlin", players: [""]},
-      {team_name: "Argentine", colors: ["Bleu clair", "Blanc"], stadium: "Stade de la Bombonera", players: [""]}
+      { _id : frId, team_name: "France", colors: ["Bleu", "Blanc"], stadium: "Stade de France", players: [""]},
+      { _id : beId, team_name: "Belgique", colors: ["Rouge", "Noir"], stadium: "Stade Roi Baudouin", players: [""]},
+      { _id : alId, team_name: "Allemagne", colors: ["Blanc", "Noir"], stadium: "Olympiastadion Berlin", players: [""]},
+      { _id : arId, team_name: "Argentine", colors: ["Bleu clair", "Blanc"], stadium: "Stade de la Bombonera", players: [""]}
     ];
 
     // Insert all teams using insertMany
@@ -93,6 +98,76 @@ async function main() {
 
     console.log(`${result_team.insertedCount} teams were inserted successfully.`);
 
+    // Update team_id for every players
+    // France players
+    db.Players.updateMany(
+      { lastName: { $in: ["Lloris", "Giroud", "Mbappe", "Griezmann", "Matuidi", "Pogba", "Kante", "Varane", "Umtiti", "Hernandez", "Pavard"] } },  
+      { $set: { teamId: frId } }
+    );
+
+    // Belgium players
+    db.Players.updateMany(
+      { lastName: { $in: ["Courtois", "Alderweireld", "Vertonghen", "Meunier", "Witsel", "De Bruyne", "Tielemans", "Hazard", "Lukaku", "Mertens", "Carrasco"] } },  
+      { $set: { teamId: beId } }
+    );
+
+    // England players
+    db.Players.updateMany(
+      { lastName: { $in: ["Pickford", "Walker", "Stones", "Maguire", "Shaw", "Rice", "Bellingham", "Henderson", "Sterling", "Kane", "Saka"] } },  
+      { $set: { teamId: enId } }
+    );
+
+    // Argentina players
+    db.Players.updateMany(
+      { lastName: { $in: ["Martinez", "Molina", "Romero", "Otamendi", "Acuna", "De Paul", "Paredes", "Mac Allister", "Messi", "Alvarez", "Di Maria"] } },  
+      { $set: { teamId: arId } }
+    );
+
+    // Update player_list for each team
+    // Update France team
+    const francePlayers = db.Players.find(
+      { teamId: frId },
+      { _id: 1 }  // Select only the player IDs
+    ).toArray().map(player => player._id);
+
+    db.Teams.updateOne(
+      { _id: frId },
+      { $set: { players: francePlayers } }
+    );
+
+    // Update Belgium team
+    const belgiumPlayers = db.Players.find(
+      { teamId: beId },
+      { _id: 1 }
+    ).toArray().map(player => player._id);
+
+    db.Teams.updateOne(
+      { _id: beId },
+      { $set: { players: belgiumPlayers } }
+    );
+
+    // Update England team
+    const englandPlayers = db.Players.find(
+      { teamId: enId },
+      { _id: 1 }
+    ).toArray().map(player => player._id);
+
+    db.Teams.updateOne(
+      { _id: enId },
+      { $set: { players: englandPlayers } }
+    );
+
+    // Update Argentina team
+    const argentinaPlayers = db.Players.find(
+      { teamId: arId },
+      { _id: 1 }
+    ).toArray().map(player => player._id);
+
+    db.Teams.updateOne(
+      { _id: arId },
+      { $set: { players: argentinaPlayers } }
+    );
+    
   } catch (error) {
     console.error("Error occurred while inserting data:", error);
 
