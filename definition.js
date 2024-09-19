@@ -167,7 +167,7 @@ async function main() {
       { _id: arId },
       { $set: { players: argentinaPlayers } }
     );
-
+    
   } catch (error) {
     console.error("Error occurred while inserting data:", error);
 
