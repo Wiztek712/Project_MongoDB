@@ -123,7 +123,6 @@ async function main() {
       { $set: { teamId: arId } }
     );
 
-    // Update player_list for each team
     // Update players list for each team
     const updateTeamPlayers = async (teamId) => {
       const players = await collection_player.find({ teamId }).toArray();
