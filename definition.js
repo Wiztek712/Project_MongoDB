@@ -1,6 +1,6 @@
 const { MongoClient, ObjectId } = require('mongodb');
 
-const uri = "mongodb://localhost:27017";  // MongoDB connection string (for local development)
+const uri = "mongodb://localhost:27017";  // MongoDB connection string
 
 async function main() {
   const client = new MongoClient(uri);
@@ -12,11 +12,12 @@ async function main() {
     // Print a confirmation message
     console.log("Connected successfully to MongoDB server");
 
-    // Choose a database (will create the database if it does not exist)
+    // Choose a database
     const database = client.db("project");
 
-    // Choose a collection (will create the collection if it does not exist)
+    // Choose a collection
     const collection_player = database.collection("Players");
+    collection_player.createIndex({lastName:1})
 
     // Define the players in an array (France, Belgium, England, and Argentina)
     const players = [
@@ -78,8 +79,9 @@ async function main() {
 
     console.log(`${result_players.insertedCount} players were inserted successfully.`);
 
-    // Choose a collection
+    // create Team collection
     const collection_team = database.collection("Teams");
+    collection_team.createIndex({team_name:1})
 
     const frId = new ObjectId();
     const beId = new ObjectId();
