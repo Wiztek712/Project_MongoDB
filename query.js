@@ -1,4 +1,8 @@
-db.Players.find({
+const connect = require('./connection');
+
+const [client, database, collection_player, collection_team] = await connect();
+
+collection_player.find({
     birthDate: {
       $lt: {
         $dateSubtract: {
