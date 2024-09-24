@@ -181,6 +181,12 @@ async function main() {
     await updateTeamPlayers(enId);
     await updateTeamPlayers(arId);
 
+    // Random mark from 0 to 5
+    function randomMark() {
+      let randomNumber = Math.random() * 5;
+      return Math.round(randomNumber * 10) / 10;
+    }
+
     // Update matches list for each team
     const updateMatchPlayers = async (matchId) => {
 
@@ -189,7 +195,7 @@ async function main() {
       const players_home_team = await collection_match.find({ match_to_update }).toArray();
       for (let i = 0; i < 12; i++) {
         const player_name_to_insert = players_home_team[i].lastName;
-        const player_mark_to_insert = 0;
+        const player_mark_to_insert = randomMark();
         const player_to_insert = { player_name: player_name_to_insert, mark: player_mark_to_insert };
         const result = await db.collection('matches').updateOne(
           { _id: matchId },
@@ -206,7 +212,7 @@ async function main() {
       const players_away_team = await collection_match.find({ away_team_id }).toArray();
       for (let i = 0; i < 12; i++) {
         const player_name_to_insert = players_away_team;
-        const player_mark_to_insert = 0;
+        const player_mark_to_insert = randomMark();
         const player_to_insert = { player_name: player_name_to_insert, mark: player_mark_to_insert };
         const result = await db.collection('matches').updateOne(
           { _id: matchId },
