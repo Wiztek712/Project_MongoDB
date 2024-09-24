@@ -112,6 +112,7 @@ async function main() {
         competition: "WorldCup",
         home_team_score: "3",
         away_team_score: "0",
+        home_team_players: [],
         home_team_players: [
           {
             player_name:"",
@@ -120,15 +121,6 @@ async function main() {
           {
             player_name:"",
             mark:""
-          }
-        ],
-        home_team_players: [
-          {
-            player_name:"",
-            mark:""
-          },
-          {
-            player_name:"",mark:""
           }
         ],
       },
@@ -139,10 +131,15 @@ async function main() {
         competition: "WorldCup",
         home_team_score: "2",
         away_team_score: "1",
-        home_team_players: [""],
-        away_team_players: [""]
+        home_team_players: [],
+        away_team_players: []
       }
     ];
+
+    // Insert all matches using insertMany
+    const result_match = await collection_match.insertMany(matches);
+
+    console.log(`${result_match.insertedCount} matches were inserted successfully.`);
     
     // Update team_id for every players
     // France players
@@ -183,6 +180,48 @@ async function main() {
     await updateTeamPlayers(beId);
     await updateTeamPlayers(enId);
     await updateTeamPlayers(arId);
+
+    // Update matches list for each team
+    const updateMatchPlayers = async (matchId) => {
+
+      const home_team_id = await collection_match.find({ matchId }).home_team_name;
+
+      const players_home_team = await collection_match.find({ match_to_update }).toArray();
+      for (let i = 0; i < 12; i++) {
+        const player_name_to_insert = players_home_team[i].lastName;
+        const player_mark_to_insert = 0;
+        const player_to_insert = { player_name: player_name_to_insert, mark: player_mark_to_insert };
+        const result = await db.collection('matches').updateOne(
+          { _id: matchId },
+          {
+            $push: {
+              home_team_players: player_to_insert
+            }
+          }
+        );
+      }
+
+      const away_team_id = await collection_match.find({ matchId }).away_team_name;
+
+      const players_away_team = await collection_match.find({ away_team_id }).toArray();
+      for (let i = 0; i < 12; i++) {
+        const player_name_to_insert = players_away_team;
+        const player_mark_to_insert = 0;
+        const player_to_insert = { player_name: player_name_to_insert, mark: player_mark_to_insert };
+        const result = await db.collection('matches').updateOne(
+          { _id: matchId },
+          {
+            $push: {
+              home_team_players: player_to_insert
+            }
+          }
+        );
+      }
+
+    };
+
+    await updateMatchPlayers(semi_final_1);
+    await updateMatchPlayers(semi_final_2);
 
   } catch (error) {
     console.error("Error occurred while inserting data:", error);
