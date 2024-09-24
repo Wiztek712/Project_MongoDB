@@ -189,41 +189,36 @@ async function main() {
 
     // Update matches list for each team
     const updateMatchPlayers = async (matchId) => {
+      const match = await collection_match.findOne({ _id: matchId });
+      const match_home_team_id = match.home_team_name;
+      const home_players = await collection_player.find({ teamId: match_home_team_id }).toArray();
 
-      const home_team_id = await collection_match.find({ matchId }).home_team_name;
+      const home_playerXmark = home_players.map(player => ({
+        playerId: player._id,
+        mark: randomMark()
+      }));
 
-      const players_home_team = await collection_match.find({ match_to_update }).toArray();
-      for (let i = 0; i < 12; i++) {
-        const player_name_to_insert = players_home_team[i].lastName;
-        const player_mark_to_insert = randomMark();
-        const player_to_insert = { player_name: player_name_to_insert, mark: player_mark_to_insert };
-        const result = await db.collection('matches').updateOne(
-          { _id: matchId },
-          {
-            $push: {
-              home_team_players: player_to_insert
-            }
-          }
-        );
-      }
+      console.log(home_playerXmark);
+      
+      await collection_match.updateOne(
+        { _id: matchId },
+        { $set: { home_team_players: home_playerXmark } }
+      );
+      
+      const match_away_team_id = match.away_team_name;
+      const away_players = await collection_player.find({ teamId: match_away_team_id }).toArray();
 
-      const away_team_id = await collection_match.find({ matchId }).away_team_name;
+      const away_playerXmark = away_players.map(player => ({
+        playerId: player._id,
+        mark: randomMark()
+      }));
 
-      const players_away_team = await collection_match.find({ away_team_id }).toArray();
-      for (let i = 0; i < 12; i++) {
-        const player_name_to_insert = players_away_team;
-        const player_mark_to_insert = randomMark();
-        const player_to_insert = { player_name: player_name_to_insert, mark: player_mark_to_insert };
-        const result = await db.collection('matches').updateOne(
-          { _id: matchId },
-          {
-            $push: {
-              home_team_players: player_to_insert
-            }
-          }
-        );
-      }
-
+      console.log(away_playerXmark);
+      
+      await collection_match.updateOne(
+        { _id: matchId },
+        { $set: { away_team_players: away_playerXmark } }
+      );
     };
 
     await updateMatchPlayers(semi_final_1);
