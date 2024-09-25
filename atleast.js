@@ -40,10 +40,21 @@ async function findPlayersWithMinMatches(minAppearences) {
                 }
             }
           ]).toArray();
-        
-          console.log(result);
-        }
+
+        const collection_player_at_least = database.collection("PlayersAtLeast");
     
+        for(let i=0; i<result.length; i++){
+
+            const player_to_add = await collection_player.findOne({_id : result[i]._id});
+
+            await collection_player_at_least.insertOne(player_to_add);
+
+            collection_player_at_least.updateOne(
+                { _id: result[i]._id },
+                { $set: { mark: result[i].averageMark } }
+            );
+        }
+    }
     catch (error) {
         console.error("Error occurred while inserting data:", error);
     }
