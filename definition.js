@@ -115,16 +115,7 @@ async function main() {
         home_team_score: "3",
         away_team_score: "0",
         home_team_players: [],
-        home_team_players: [
-          {
-            player_name:"",
-            mark:""
-          },
-          {
-            player_name:"",
-            mark:""
-          }
-        ],
+        home_team_players: [],
       },
       {
         _id : semi_final_2,
