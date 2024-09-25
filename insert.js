@@ -13,7 +13,7 @@ function askQuestion(query) {
 }
 
 async function insertPlayer(firstName, lastName, birthDate, height, weight, position, team){
-    const [client, database, collection_player, collection_team] = await connect();
+    const [client, database, collection_player, collection_team, collection_match] = await connect();
     try {
         // Find the team ID by its name
         const team_data = await collection_team.findOne({ team_name: team }, { _id: 1 });
@@ -57,7 +57,7 @@ async function insertTeam(team_name, colors, stadium, players) {
         throw new Error("Exactly 11 players must be provided.");
     }
 
-    const [client, database, collection_player, collection_team] = await connect();
+    const [client, database, collection_player, collection_team, collection_match] = await connect();
 
     try {
         // Check if the team already exists
