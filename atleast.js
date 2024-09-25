@@ -10,7 +10,7 @@ async function atLeastCollection(listIdSelectedPlayers){
 
         const player_to_add = await collection_player.findOne({_id : listIdSelectedPlayers[i]._id});
 
-        await collection_player.insertOne(player_to_add);
+        await collection_player_at_least.insertOne(player_to_add);
 
         collection_player_at_least.updateOne(
             { _id: listIdSelectedPlayers[i]._id },
