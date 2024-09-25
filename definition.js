@@ -99,6 +99,49 @@ async function main() {
     const result_team = await collection_team.insertMany(teams);
 
     console.log(`${result_team.insertedCount} teams were inserted successfully.`);
+
+    // Match creation
+    const collection_match = database.collection("Matches");
+
+    const semi_final_1 = new ObjectId();
+    const semi_final_2 = new ObjectId();
+
+    const matches = [
+      {
+        _id : semi_final_1,
+        home_team_name: frId,
+        away_team_name: beId,
+        competition: "WorldCup",
+        home_team_score: "3",
+        away_team_score: "0",
+        home_team_players: [],
+        home_team_players: [
+          {
+            player_name:"",
+            mark:""
+          },
+          {
+            player_name:"",
+            mark:""
+          }
+        ],
+      },
+      {
+        _id : semi_final_2,
+        home_team_name: arId,
+        away_team_name: enId,
+        competition: "WorldCup",
+        home_team_score: "2",
+        away_team_score: "1",
+        home_team_players: [],
+        away_team_players: []
+      }
+    ];
+
+    // Insert all matches using insertMany
+    const result_match = await collection_match.insertMany(matches);
+
+    console.log(`${result_match.insertedCount} matches were inserted successfully.`);
     
     // Update team_id for every players
     // France players
@@ -139,6 +182,49 @@ async function main() {
     await updateTeamPlayers(beId);
     await updateTeamPlayers(enId);
     await updateTeamPlayers(arId);
+
+    // Random mark from 0 to 5
+    function randomMark() {
+      let randomNumber = Math.random() * 5;
+      return Math.round(randomNumber * 10) / 10;
+    }
+
+    // Update matches list for each team
+    const updateMatchPlayers = async (matchId) => {
+      const match = await collection_match.findOne({ _id: matchId });
+      const match_home_team_id = match.home_team_name;
+      const home_players = await collection_player.find({ teamId: match_home_team_id }).toArray();
+
+      const home_playerXmark = home_players.map(player => ({
+        playerId: player._id,
+        mark: randomMark()
+      }));
+
+      console.log(home_playerXmark);
+      
+      await collection_match.updateOne(
+        { _id: matchId },
+        { $set: { home_team_players: home_playerXmark } }
+      );
+      
+      const match_away_team_id = match.away_team_name;
+      const away_players = await collection_player.find({ teamId: match_away_team_id }).toArray();
+
+      const away_playerXmark = away_players.map(player => ({
+        playerId: player._id,
+        mark: randomMark()
+      }));
+
+      console.log(away_playerXmark);
+      
+      await collection_match.updateOne(
+        { _id: matchId },
+        { $set: { away_team_players: away_playerXmark } }
+      );
+    };
+
+    await updateMatchPlayers(semi_final_1);
+    await updateMatchPlayers(semi_final_2);
 
   } catch (error) {
     console.error("Error occurred while inserting data:", error);
