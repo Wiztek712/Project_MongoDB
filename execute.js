@@ -27,13 +27,18 @@ const findPlayersWithMinMatches = require('./atleast.js');
 // );
 
 // ----------------------------------Insert a Match
+//
 
-// insertMatch("France","Argentine", "match_amical", 14, 2);
+//insertMatch("France","Argentine", "match_amical", 14, 2);
+// The first argument is the name of the home team, then the name of the away team, then the name of the match
+// then the home team score and eventually the away team score
 
-// ----------------------------------Create a database with players that played at least X matches
+// ----------------------------------Create a database with players that played at least X matches (here 5)
 
 // findPlayersWithMinMatches(5);
 
 // ----------------------------------Find players that played at a specific postion and that are less than X years old.
+// The first argument is the age limit (here 25) and the second argument is the position ("attaquant", "defenseur", "milieu" or "gardien")
+// If you put something else than the four listed positions, you will not have any results
 
 // findPlayerByAgeAndPosition(25,"attaquant");
