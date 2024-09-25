@@ -1,25 +1,25 @@
+// Here we initialize the database.
+
 const { MongoClient, ObjectId } = require('mongodb');
 
-const uri = "mongodb://localhost:27017";  // MongoDB connection string
+const uri = "mongodb://localhost:27017";
 
 async function main() {
   const client = new MongoClient(uri);
 
   try {
-    // Connect to MongoDB
     await client.connect();
 
-    // Print a confirmation message
     console.log("Connected successfully to MongoDB server");
 
-    // Choose a database
+    // Choose the database.
     const database = client.db("project");
 
-    // Choose a collection
+    // Choose the players collection.
     const collection_player = database.collection("Players");
     collection_player.createIndex({lastName:1})
 
-    // Define the players in an array (France, Belgium, England, and Argentina)
+    // Define the players in an array (France, Belgium, England, and Argentina).
     const players = [
       // France
       { _id : new ObjectId(), firstName: "Hugo", lastName: "Lloris", birthDate: new Date("1986-12-26T00:00:00Z"), height: 188, weight: 85, position: "gardien" },
@@ -74,7 +74,7 @@ async function main() {
       { _id : new ObjectId(), firstName: "Angel", lastName: "Di Maria", birthDate: new Date("1988-02-14T00:00:00Z"), height: 180, weight: 75, position: "attaquant" }
 ];
 
-    // Insert all players using insertMany
+    // Insert all players.
     const result_players = await collection_player.insertMany(players);
 
     console.log(`${result_players.insertedCount} players were inserted successfully.`);
@@ -95,12 +95,12 @@ async function main() {
       { _id : arId, team_name: "Argentine", colors: ["Bleu clair", "Blanc"], stadium: "Stade de la Bombonera", players: [""]}
     ];
 
-    // Insert all teams using insertMany
+    // Insert all teams.
     const result_team = await collection_team.insertMany(teams);
 
     console.log(`${result_team.insertedCount} teams were inserted successfully.`);
 
-    // Match creation
+    // Match creation.
     const collection_match = database.collection("Matches");
 
     const semi_final_1 = new ObjectId();
@@ -140,12 +140,12 @@ async function main() {
       }
     ];
 
-    // Insert all matches using insertMany
+    // Insert all matches.
     const result_match = await collection_match.insertMany(matches);
 
     console.log(`${result_match.insertedCount} matches were inserted successfully.`);
     
-    // Update team_id for every players
+    // Update team_id for every players.
     // France players
     collection_player.updateMany(
       { lastName: { $in: ["Lloris", "Giroud", "Mbappe", "Griezmann", "Matuidi", "Pogba", "Kante", "Varane", "Umtiti", "Hernandez", "Pavard"] } },  
@@ -170,7 +170,7 @@ async function main() {
       { $set: { teamId: arId } }
     );
 
-    // Update players list for each team
+    // Update players list for each team.
     const updateTeamPlayers = async (teamId) => {
       const players = await collection_player.find({ teamId }).toArray();
       const playerIds = players.map(player => player._id);
@@ -191,24 +191,23 @@ async function main() {
       return Math.round(randomNumber * 10) / 10;
     }
 
-    // Update matches list for each team
+    // Update matches list for each team.
     const updateMatchPlayers = async (matchId) => {
-      const match = await collection_match.findOne({ _id: matchId });
-      const match_home_team_id = match.home_team_name;
-      const home_players = await collection_player.find({ teamId: match_home_team_id }).toArray();
+      const match = await collection_match.findOne({ _id: matchId }); // get the match to update.
+      const match_home_team_id = match.home_team_name; // get the home_team_players id.
+      const home_players = await collection_player.find({ teamId: match_home_team_id }).toArray(); // retrieve the players into this team.
 
-      const home_playerXmark = home_players.map(player => ({
+      const home_playerXmark = home_players.map(player => ({ // map each players with their Id and the mark.
         playerId: player._id,
         mark: randomMark()
       }));
-
-      console.log(home_playerXmark);
       
-      await collection_match.updateOne(
+      await collection_match.updateOne( // update for the home_players_team.
         { _id: matchId },
-        { $set: { home_team_players: home_playerXmark } }
+        { $set: { home_team_players: home_playerXmark } } 
       );
       
+      // Same process for the away team
       const match_away_team_id = match.away_team_name;
       const away_players = await collection_player.find({ teamId: match_away_team_id }).toArray();
 
@@ -216,10 +215,8 @@ async function main() {
         playerId: player._id,
         mark: randomMark()
       }));
-
-      console.log(away_playerXmark);
       
-      await collection_match.updateOne(
+      await collection_match.updateOne( // update for the away_players_team.
         { _id: matchId },
         { $set: { away_team_players: away_playerXmark } }
       );
@@ -233,7 +230,6 @@ async function main() {
     console.error("Error occurred while inserting data:", error);
 
   } finally {
-    // Close the connection
     await client.close();
   }
 }
