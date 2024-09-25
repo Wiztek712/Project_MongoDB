@@ -22,4 +22,4 @@ async function findPlayerByAgeAndPosition(age_, position_){
   }
 }
 
-findPlayerByAgeAndPosition(25,"attaquant")
+module.exports = findPlayerByAgeAndPosition;
