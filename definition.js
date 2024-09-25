@@ -105,6 +105,7 @@ async function main() {
 
     const semi_final_1 = new ObjectId();
     const semi_final_2 = new ObjectId();
+    const final = new ObjectId();
 
     const matches = [
       {
@@ -115,16 +116,7 @@ async function main() {
         home_team_score: "3",
         away_team_score: "0",
         home_team_players: [],
-        home_team_players: [
-          {
-            player_name:"",
-            mark:""
-          },
-          {
-            player_name:"",
-            mark:""
-          }
-        ],
+        home_team_players: [],
       },
       {
         _id : semi_final_2,
@@ -133,6 +125,16 @@ async function main() {
         competition: "WorldCup",
         home_team_score: "2",
         away_team_score: "1",
+        home_team_players: [],
+        away_team_players: []
+      },
+      {
+        _id : final,
+        home_team_name: arId,
+        away_team_name: frId,
+        competition: "WorldCup",
+        home_team_score: "0",
+        away_team_score: "46",
         home_team_players: [],
         away_team_players: []
       }
@@ -225,6 +227,7 @@ async function main() {
 
     await updateMatchPlayers(semi_final_1);
     await updateMatchPlayers(semi_final_2);
+    await updateMatchPlayers(final);
 
   } catch (error) {
     console.error("Error occurred while inserting data:", error);
