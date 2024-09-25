@@ -1,6 +1,6 @@
 // Query for finding players that have played at least X matches and creating a collection with these players and their average mark over their matches.
 
-const connect = require('./connection');
+const connect = require('./connection.js');
 
 async function findPlayersWithMinMatches(minAppearances) {
 
@@ -71,6 +71,7 @@ async function findPlayersWithMinMatches(minAppearances) {
             { $set: { mark: result[i].averageMark } }
         );
     }
+    console.log(`Collection ${collection_name} created.`);
   }
   catch (error) {
       console.error("Error occurred while inserting data:", error);
@@ -80,4 +81,4 @@ async function findPlayersWithMinMatches(minAppearances) {
   }
 }
 
-findPlayersWithMinMatches(1)
+module.exports = findPlayersWithMinMatches;
