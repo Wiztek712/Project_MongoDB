@@ -197,11 +197,6 @@ async function insertMatch(homeTeamName, awayTeamName, competition, homeTeamScor
 
         const result = await collection_match.insertOne(matchData);
 
-        if (result.insertedCount > 0) {
-            console.log(`New match inserted with id: ${matchId}`);
-        } else {
-            console.log(`Match insertion failed.`);
-        }
     } catch (error) {
         console.error("Error occurred while inserting match data:", error);
     } finally {

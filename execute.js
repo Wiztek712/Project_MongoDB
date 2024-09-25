@@ -28,11 +28,11 @@ const findPlayersWithMinMatches = require('./atleast.js');
 
 // ----------------------------------Insert a Match
 
-//insertMatch("France","Argentine", "match_amical", 14, 2);
+// insertMatch("France","Argentine", "match_amical", 14, 2);
 
 // ----------------------------------Create a database with players that played at least X matches
 
-//findPlayersWithMinMatches(5);
+// findPlayersWithMinMatches(5);
 
 // ----------------------------------Find players that played at a specific postion and that are less than X years old.
 
