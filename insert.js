@@ -1,3 +1,5 @@
+// Here are the function as to insert a player, a team or a match in the database.
+
 const connect = require('./connection');
 const { ObjectId } = require('mongodb');
 const readline = require('readline');
@@ -11,6 +13,13 @@ const rl = readline.createInterface({
 function askQuestion(query) {
     return new Promise(resolve => rl.question(query, resolve));
 }
+
+function randomMark() {
+    let randomNumber = Math.random() * 5;
+    return Math.round(randomNumber * 10) / 10;
+}
+
+// ---------------------------------------Insert a player
 
 async function insertPlayer(firstName, lastName, birthDate, height, weight, position, team){
     const [client, database, collection_player, collection_team, collection_match] = await connect();
@@ -50,8 +59,7 @@ async function insertPlayer(firstName, lastName, birthDate, height, weight, posi
     }
 }
 
-
-
+// ---------------------------------------Insert a team
 async function insertTeam(team_name, colors, stadium, players) {
     if (players.length !== 11) {
         throw new Error("Exactly 11 players must be provided.");
@@ -141,7 +149,67 @@ async function insertTeam(team_name, colors, stadium, players) {
     }
 }
 
-insertPlayer("John", "Doe", "1990-05-14", 180, 75, "attaquant", "Espagne")
+// ---------------------------------------Insert a match
+
+async function insertMatch(homeTeamName, awayTeamName, competition, homeTeamScore, awayTeamScore) {
+    const [client, database, collection_player, collection_team, collection_match] = await connect();
+
+    try {
+        // Find home team by name
+        const homeTeam = await collection_team.findOne({ team_name: homeTeamName });
+        if (!homeTeam) {
+            throw new Error(`Home team ${homeTeamName} not found.`);
+        }
+
+        // Find away team by name
+        const awayTeam = await collection_team.findOne({ team_name: awayTeamName });
+        if (!awayTeam) {
+            throw new Error(`Away team ${awayTeamName} not found.`);
+        }
+
+        // Get home team players and assign random marks
+        const homePlayers = await collection_player.find({ teamId: homeTeam._id }).toArray();
+        const homePlayerMarks = homePlayers.map(player => ({
+            playerId: player._id,
+            mark: randomMark()
+        }));
+
+        // Get away team players and assign random marks
+        const awayPlayers = await collection_player.find({ teamId: awayTeam._id }).toArray();
+        const awayPlayerMarks = awayPlayers.map(player => ({
+            playerId: player._id,
+            mark: randomMark()
+        }));
+
+        // Insert match data into the Matches collection
+        const matchId = new ObjectId();  // Generate a new match ID
+
+        const matchData = {
+            _id: matchId,
+            home_team_name: homeTeam._id,
+            away_team_name: awayTeam._id,
+            competition: competition,
+            home_team_score: homeTeamScore,
+            away_team_score: awayTeamScore,
+            home_team_players: homePlayerMarks,
+            away_team_players: awayPlayerMarks
+        };
+
+        const result = await collection_match.insertOne(matchData);
+
+        if (result.insertedCount > 0) {
+            console.log(`New match inserted with id: ${matchId}`);
+        } else {
+            console.log(`Match insertion failed.`);
+        }
+    } catch (error) {
+        console.error("Error occurred while inserting match data:", error);
+    } finally {
+        await client.close();
+    }
+}
+
+insertPlayer("John", "Doe", "1990-05-14", 180, 75, "attaquant", "Espagne");
 
 insertTeam("ASSE", ["Vert", "Blanc"], "Stade Geoffroy Guichard",
     [
@@ -157,4 +225,6 @@ insertTeam("ASSE", ["Vert", "Blanc"], "Stade Geoffroy Guichard",
       {firstName: "Lucas", lastName: "Hernandez"},
       { firstName: "Quentin", lastName: "Raban"}
     ]
-)
+);
+
+insertMatch("France","Belgique", "match amical", 14, 2);

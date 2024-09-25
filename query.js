@@ -1,3 +1,5 @@
+// Query for finding players depending on their position and their birthdate
+
 const connect = require('./connection');
 
 async function findPlayerByAgeAndPosition(age_, position_){
@@ -5,7 +7,7 @@ async function findPlayerByAgeAndPosition(age_, position_){
 
   try {
     const currentDate = new Date();
-    const birthDate_ = new Date(currentDate.setFullYear(currentDate.getFullYear() - age_));
+    const birthDate_ = new Date(currentDate.setFullYear(currentDate.getFullYear() - age_)); // get the maximum birthdate to allow depending on the age
 
     const result = await collection_player.find({
       birthDate: { $gte: birthDate_ },
@@ -16,7 +18,7 @@ async function findPlayerByAgeAndPosition(age_, position_){
   } catch (error) {
     console.error("Error occurred while querying database:", error);
   } finally {
-    await client.close();  // Ensure the MongoDB connection is closed
+    await client.close();
   }
 }
 
