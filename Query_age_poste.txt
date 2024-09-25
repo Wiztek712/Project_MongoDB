@@ -1,0 +1,14 @@
+{"position":"gardien",
+ $expr: {
+        $lte: [
+            "$birthDate",
+            {
+                $dateSubtract: {
+                    startDate: new Date(),
+                    unit: "year",
+                    amount: 25
+                }
+            }
+        ]
+    }
+}
