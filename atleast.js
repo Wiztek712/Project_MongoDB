@@ -1,6 +1,6 @@
 const connect = require('./connection');
 
-async function findPlayersWithMinMatches(minAppearences) {
+async function findPlayersWithMinMatches(minAppearances) {
     const [client, database, collection_player, collection_team, collection_match] = await connect();
     try{
         const result = await collection_match.aggregate([
@@ -31,7 +31,7 @@ async function findPlayersWithMinMatches(minAppearences) {
             },
 
             { $match: {
-                appearanceCount: { $gte: minAppearences }
+                appearanceCount: { $gte: minAppearances }
               }
             },
             { $project: {
@@ -41,8 +41,18 @@ async function findPlayersWithMinMatches(minAppearences) {
             }
           ]).toArray();
 
-        const collection_player_at_least = database.collection("PlayersAtLeast");
+        const collection_name = `PlayersAtLeast_${minAppearances}`;
+        // Check if the collection exists
+        const collections = await database.listCollections({ name: collection_name }).toArray();
+
+        // If the collection exists, drop it
+        if (collections.length > 0) {
+            await database.collection(collection_name).drop();
+            console.log(`Collection ${collection_name} dropped.`);
+        }
     
+        const collection_player_at_least = database.collection(collection_name);
+
         for(let i=0; i<result.length; i++){
 
             const player_to_add = await collection_player.findOne({_id : result[i]._id});
@@ -63,4 +73,4 @@ async function findPlayersWithMinMatches(minAppearences) {
     }
 }
 
-findPlayersWithMinMatches(2)
+findPlayersWithMinMatches(1)
