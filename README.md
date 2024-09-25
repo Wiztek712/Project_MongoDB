@@ -1,7 +1,7 @@
 # Project_MongoDB
- FISE3_NoSQL
- JACQUET Clément
- RABAN Quentin
+ FISE3_NoSQL  
+ JACQUET Clément  
+ RABAN Quentin  
 
 # Structure du code : 
 Les différents scripts de manipulation de la base sont situés dans les fichiers :
